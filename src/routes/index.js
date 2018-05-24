@@ -4,7 +4,7 @@ import Home from './Home';
 import Login from './Login';
 import store from '../store';
 
-const auth = (to, from, next) => {
+const ifAuth = (to, from, next) => {
   const token = to.query.access_token;
   const isAuth = store.getters.isAuthenticated;
 
@@ -21,17 +21,29 @@ const auth = (to, from, next) => {
   next('/login');
 };
 
+const ifNotAuth = (to, from, next) => {
+  const isAuth = store.getters.isAuthenticated;
+
+  if (!isAuth) {
+    next();
+    return;
+  }
+
+  next('/');
+};
+
 const router = new VueRouter({
   mode: 'history',
   routes: [
     {
       path: '/',
       component: Home,
-      beforeEnter: auth,
+      beforeEnter: ifAuth,
     },
     {
       path: '/login',
       component: Login,
+      beforeEnter: ifNotAuth,
     },
   ],
 });

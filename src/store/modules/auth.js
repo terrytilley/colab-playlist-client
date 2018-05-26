@@ -1,5 +1,5 @@
 const state = {
-  token: window.localStorage.getItem('access_token'),
+  token: window.localStorage.getItem('access_token') || null,
 };
 
 const getters = {

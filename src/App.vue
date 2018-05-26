@@ -1,11 +1,67 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+  <v-app id="inspire" dark>
+    <v-navigation-drawer
+      v-model="drawer"
+      clipped
+      fixed
+      app
+    >
+      <v-list dense>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>dashboard</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Dashboard</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Settings</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar app fixed clipped-left color="green">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>Colab Playlists</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn flat v-if="this.$store.getters.isAuthenticated" @click="logout">Logout</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout justify-center align-start>
+          <v-flex>
+            <router-view></router-view>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+    <v-footer app fixed>
+      <span>&copy; 2017</span>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
 export default {
   name: 'App',
+  data() {
+    return {
+      drawer: false,
+    };
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('access_token');
+      this.$store.commit('setToken', null);
+      this.$router.push('/login');
+    },
+  },
 };
 </script>

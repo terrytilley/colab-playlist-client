@@ -2,6 +2,7 @@ import VueRouter from 'vue-router';
 
 import Home from './Home';
 import Login from './Login';
+import Playlist from './Playlist';
 import store from '../store';
 
 const ifAuth = (to, from, next) => {
@@ -44,6 +45,12 @@ const router = new VueRouter({
       path: '/login',
       component: Login,
       beforeEnter: ifNotAuth,
+    },
+    {
+      name: 'Playlist',
+      path: '/playlist/:id',
+      component: Playlist,
+      beforeEnter: ifAuth,
     },
   ],
 });

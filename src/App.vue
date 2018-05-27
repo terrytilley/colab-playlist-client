@@ -1,36 +1,20 @@
 <template>
   <v-app id="inspire" dark>
     <v-navigation-drawer
+      v-if="isAuth"
       v-model="drawer"
       clipped
       fixed
       app
     >
-      <v-list dense>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>dashboard</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Dashboard</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>settings</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Settings</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
+      <Sidebar />
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left color="green">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Colab Playlists</v-toolbar-title>
+      <v-toolbar-side-icon v-if="isAuth" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title @click="clickRoot" class="logo">Colab Playlists</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat v-if="this.$store.getters.isAuthenticated" @click="logout">Logout</v-btn>
+        <v-btn flat v-if="isAuth" @click="logout">Logout</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
@@ -49,14 +33,27 @@
 </template>
 
 <script>
+import Sidebar from './components/layout/Sidebar.vue';
+
 export default {
   name: 'App',
+  components: {
+    Sidebar,
+  },
   data() {
     return {
-      drawer: false,
+      drawer: true,
     };
   },
+  computed: {
+    isAuth() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
   methods: {
+    clickRoot() {
+      this.$router.push('/');
+    },
     logout() {
       localStorage.removeItem('access_token');
       this.$store.commit('setToken', null);
@@ -65,3 +62,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.logo {
+  cursor: pointer;
+}
+</style>

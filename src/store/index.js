@@ -1,12 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import user from './modules/user';
 import auth from './modules/auth';
-import currentUser from './modules/currentUser';
+import playlist from './modules/playlist';
 import playlists from './modules/playlists';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules: { auth, currentUser, playlists },
+  modules: {
+    user,
+    auth,
+    playlist,
+    playlists,
+  },
 });

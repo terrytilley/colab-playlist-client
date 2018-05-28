@@ -6,12 +6,14 @@ import Playlist from './Playlist';
 import store from '../store';
 
 const ifAuth = (to, from, next) => {
-  const token = to.query.access_token;
+  const accessToken = to.query.access_token;
+  const refreshToken = to.query.refresh_token;
   const isAuth = store.getters.isAuthenticated;
 
-  if (token) {
-    store.commit('setToken', token);
-    localStorage.setItem('access_token', token);
+  if (accessToken && refreshToken) {
+    store.commit('setToken', accessToken);
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('refresh_token', refreshToken);
   }
 
   if (isAuth) {

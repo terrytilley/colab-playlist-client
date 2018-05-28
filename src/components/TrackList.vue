@@ -1,20 +1,16 @@
 <template>
   <div>
-    <h1>TrackList</h1>
+    <h1>{{ playlist.name }}</h1>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'TrackList',
-  props: ['playlistId'],
-  methods: {
-    ...mapActions(['getPlaylist']),
-  },
-  created() {
-    this.getPlaylist();
+  computed: {
+    ...mapGetters(['playlist']),
   },
 };
 </script>

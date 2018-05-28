@@ -9,6 +9,7 @@ import playlists from './modules/playlists';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  strict: true,
   modules: {
     user,
     auth,

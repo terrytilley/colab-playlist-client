@@ -1,8 +1,9 @@
-// import api from '../../api';
+import api from '../../api';
 
 const state = {
   name: '',
-  tracks: [],
+  tracks: {},
+  images: [],
 };
 
 const getters = {
@@ -10,15 +11,28 @@ const getters = {
 };
 
 const actions = {
-  async getPlaylist({ state, rootState }) {
-    console.log('state', state);
-    console.log('rootState', rootState);
+  async getPlaylist({ getters, commit, dispatch }, playlistId) {
+    try {
+      await dispatch('getUser');
+      const token = getters.token;
+      const userId = getters.user.id;
+      const response = await api.getPlaylist(token, userId, playlistId);
+
+      commit('setPlaylistDetails', response.data);
+      commit('setPlaylistTracks', response.data);
+    } catch (err) {
+      console.error(err);
+    }
   },
 };
 
 const mutations = {
-  updateTracks: (state, tracks) => {
-    console.log('tracks', tracks);
+  setPlaylistDetails: (state, payload) => {
+    state.name = payload.name;
+    state.images = payload.images;
+  },
+  setPlaylistTracks: (state, payload) => {
+    state.tracks = payload.tracks;
   },
 };
 

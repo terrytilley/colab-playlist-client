@@ -7,25 +7,27 @@ const getters = {
 };
 
 const actions = {
-  async getUser({ rootState, commit }) {
-    const { token } = rootState.auth;
-    const response = await api.currentUser(token);
+  async getUser({ rootState, getters, commit }) {
+    if (!getters.user.id) {
+      try {
+        const { token } = rootState.auth;
+        const response = await api.currentUser(token);
 
-    commit('updateUser', response.data);
+        commit('setUser', response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   },
 };
 
 const mutations = {
-  updateUser: (state, user) => {
-    state.id = user.id;
-    state.country = user.country;
-    state.name = user.display_name;
-    state.email = user.email;
-    state.externalUrls = user.external_urls;
-    state.followers = user.followers;
-    state.href = user.href;
-    state.images = user.images;
-    state.uri = user.uri;
+  setUser: (state, payload) => {
+    state.id = payload.id;
+    state.email = payload.email;
+    state.displayName = payload.display_name;
+    state.followers = payload.followers.total;
+    state.image = payload.images[0].url;
   },
 };
 

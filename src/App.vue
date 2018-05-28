@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Sidebar from './components/layout/Sidebar.vue';
 
 export default {
@@ -51,14 +52,19 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['getUser']),
     clickRoot() {
       this.$router.push('/');
     },
     logout() {
       localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
       this.$store.commit('setToken', null);
       this.$router.push('/login');
     },
+  },
+  created() {
+    this.getUser();
   },
 };
 </script>

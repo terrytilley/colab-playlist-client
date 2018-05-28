@@ -1,10 +1,11 @@
 <template>
   <div>
-    <TrackList :playlistId="playlistId" />
+    <TrackList />
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import TrackList from '../components/TrackList';
 
 export default {
@@ -12,10 +13,16 @@ export default {
   components: {
     TrackList,
   },
-  data() {
-    return {
-      playlistId: this.$route.params.id,
-    };
+  methods: {
+    ...mapActions(['getPlaylist']),
+  },
+  computed: {
+    playlistId() {
+      return this.$route.params.id;
+    },
+  },
+  created() {
+    this.getPlaylist(this.playlistId);
   },
 };
 </script>
